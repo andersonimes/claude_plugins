@@ -4,50 +4,75 @@
 
 ## Quick Start: Installing Plugins
 
-### Installing Individual Plugins
+### Method 1: Install Directly from GitHub (Easiest!)
 
-To use a plugin from this marketplace:
+Claude Code can consume plugins directly from GitHub without cloning:
 
-**Option 1 - Claude Code CLI (Recommended):**
-```bash
-claude-code plugins install ~/projects/plugin_marketplace/plugins/plugin-name
+**Step 1: Add this repo as a marketplace**
+
+In Claude Code, run:
+```
+/plugin marketplace add andersonimes/plugin_marketplace
 ```
 
-**Option 2 - Manual Installation:**
+**Step 2: Install plugins from the marketplace**
+
+Browse and install interactively:
+```
+/plugin
+```
+Then select "Browse Plugins" and choose from your marketplace.
+
+Or install directly by name:
+```
+/plugin install marketplace-help@plugin_marketplace
+```
+
+**Managing plugins:**
+```
+/plugin enable marketplace-help@plugin_marketplace
+/plugin disable marketplace-help@plugin_marketplace
+/plugin uninstall marketplace-help@plugin_marketplace
+```
+
+### Method 2: Install from Local Clone
+
+If you have this repo cloned locally:
+
+**Add local marketplace:**
+```
+/plugin marketplace add ~/projects/plugin_marketplace
+```
+
+Then install plugins the same way:
+```
+/plugin install marketplace-help@plugin_marketplace
+```
+
+### Method 3: Manual Installation (No Marketplace)
+
+**Copy individual plugin:**
 ```bash
-# Copy plugin to Claude Code plugins directory
 cp -r ~/projects/plugin_marketplace/plugins/plugin-name ~/.claude/plugins/
-
-# Restart Claude Code
 ```
 
-**Option 3 - Symlink (for development):**
+**Symlink for development:**
 ```bash
-# Create symlink so changes sync automatically
 ln -s ~/projects/plugin_marketplace/plugins/plugin-name ~/.claude/plugins/plugin-name
 ```
 
-### Installing All Plugins at Once
-
-To install every plugin from this marketplace:
-
-```bash
-# Install all at once
-for plugin in ~/projects/plugin_marketplace/plugins/*/; do
-  claude-code plugins install "$plugin"
-done
-```
-
-Or manually:
+**Install all at once:**
 ```bash
 cp -r ~/projects/plugin_marketplace/plugins/* ~/.claude/plugins/
 ```
+
+Then restart Claude Code.
 
 ### Verifying Installation
 
 After installation, restart Claude Code and verify:
 - Slash commands: Type `/` to see if your commands appear
-- Check installed plugins: `claude-code plugins list` (if supported)
+- List installed plugins: `/plugin` and select "Manage Installed Plugins"
 - Look in `~/.claude/plugins/` to see installed plugins
 
 ## Why This Repo Exists
@@ -58,6 +83,9 @@ I created this to organize my Claude Code plugins in one place. Initially I set 
 - Each plugin is self-contained and portable
 - I can easily share specific plugins later if I want
 - The structure matches what I see in the official Anthropic plugins repo
+- I can consume plugins directly from GitHub (even though it's private - I'm authenticated)
+
+**Note**: This is a **private repository**. Claude Code can access it because I'm authenticated with GitHub. If I want to share plugins with others, I would either make the repo public or they would need access to this private repo.
 
 ## How Plugin Structure Works
 
@@ -122,12 +150,20 @@ When I want to add a new plugin:
 
 5. **Test it**: `claude-code plugins install ~/projects/plugin_marketplace/plugins/my-new-plugin`
 
-6. **Commit it**:
+6. **Commit and push**:
    ```bash
    git add plugins/my-new-plugin
    git commit -m "Add my-new-plugin: brief description"
    git push
    ```
+
+7. **Install from GitHub**:
+   ```
+   # In Claude Code
+   /plugin install my-new-plugin@plugin_marketplace
+   ```
+
+   The plugin is automatically available since the marketplace is linked to this GitHub repo!
 
 ## Quick Reference: Plugin Components
 
