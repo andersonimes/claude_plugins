@@ -2,6 +2,54 @@
 
 **Private repo** - This is where I store my custom Claude Code plugins following the official Anthropic structure.
 
+## Quick Start: Installing Plugins
+
+### Installing Individual Plugins
+
+To use a plugin from this marketplace:
+
+**Option 1 - Claude Code CLI (Recommended):**
+```bash
+claude-code plugins install ~/projects/plugin_marketplace/plugins/plugin-name
+```
+
+**Option 2 - Manual Installation:**
+```bash
+# Copy plugin to Claude Code plugins directory
+cp -r ~/projects/plugin_marketplace/plugins/plugin-name ~/.claude/plugins/
+
+# Restart Claude Code
+```
+
+**Option 3 - Symlink (for development):**
+```bash
+# Create symlink so changes sync automatically
+ln -s ~/projects/plugin_marketplace/plugins/plugin-name ~/.claude/plugins/plugin-name
+```
+
+### Installing All Plugins at Once
+
+To install every plugin from this marketplace:
+
+```bash
+# Install all at once
+for plugin in ~/projects/plugin_marketplace/plugins/*/; do
+  claude-code plugins install "$plugin"
+done
+```
+
+Or manually:
+```bash
+cp -r ~/projects/plugin_marketplace/plugins/* ~/.claude/plugins/
+```
+
+### Verifying Installation
+
+After installation, restart Claude Code and verify:
+- Slash commands: Type `/` to see if your commands appear
+- Check installed plugins: `claude-code plugins list` (if supported)
+- Look in `~/.claude/plugins/` to see installed plugins
+
 ## Why This Repo Exists
 
 I created this to organize my Claude Code plugins in one place. Initially I set it up with a different structure (organized by type), but then discovered Anthropic has an official plugin format, so I refactored everything to match theirs. This way:
@@ -34,23 +82,8 @@ plugins/my-plugin/
 ### marketplace-help
 A simple command that provides info about this marketplace. Created it as my first example plugin.
 
+**Components**: Commands (`/marketplace-info`)
 **Install**: `claude-code plugins install ~/projects/plugin_marketplace/plugins/marketplace-help`
-
-## How to Install My Plugins
-
-Two ways:
-
-**Option 1 - Claude Code CLI (easier):**
-```bash
-claude-code plugins install ~/projects/plugin_marketplace/plugins/plugin-name
-```
-
-**Option 2 - Manual (if CLI doesn't work):**
-```bash
-cp -r ~/projects/plugin_marketplace/plugins/plugin-name ~/.claude/plugins/
-```
-
-Then restart Claude Code.
 
 ## How to Create a New Plugin
 
@@ -115,9 +148,11 @@ When I want to add a new plugin:
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Detailed guide I wrote for myself on plugin structure
 - [plugins/README.md](plugins/README.md) - Quick overview of what's in the plugins directory
 
-## Location
+## Repository Info
 
-This repo lives at: `~/projects/plugin_marketplace/`
+- **Local path**: `~/projects/plugin_marketplace/`
+- **GitHub**: https://github.com/andersonimes/plugin_marketplace (private)
+- **Clone command**: `git clone https://github.com/andersonimes/plugin_marketplace.git`
 
 ## Git Commands I'll Need
 
