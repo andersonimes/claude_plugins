@@ -30,20 +30,22 @@ Then install:
 /plugin install session-summarizer@claude_plugins
 ```
 
-## Configuration
+That's it — it works out of the box with sensible defaults. Summaries are saved to `~/session-summaries/`.
 
-After installing, create `~/.claude/session-summarizer.conf`:
+## Configuration (optional)
+
+To customize behavior, create `~/.claude/session-summarizer.conf`:
 
 ```
-OUTPUT_DIR=~/claude-sessions
+OUTPUT_DIR=~/my-notes/sessions
 USER_NAME=Alice
 MODEL=claude-haiku-4-5-20251001
 ```
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `OUTPUT_DIR` | Where to save summaries | `~/claude-sessions` |
-| `USER_NAME` | How you're referred to in summaries | System username |
+| `OUTPUT_DIR` | Where to save summaries | `~/session-summaries` |
+| `USER_NAME` | How you're referred to in summaries | `The User` |
 | `MODEL` | Claude model for summarization | `claude-haiku-4-5-20251001` |
 
 Environment variables with the same names override the config file.
@@ -53,7 +55,7 @@ Environment variables with the same names override the config file.
 Summaries are saved as markdown organized by year and month:
 
 ```
-claude-sessions/
+session-summaries/
   2026/
     03/
       2026-03-12-1430-debugging-api-rate-limits.md

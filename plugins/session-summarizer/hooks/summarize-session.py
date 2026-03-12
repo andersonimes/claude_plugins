@@ -40,8 +40,8 @@ def load_config() -> dict:
 
 CFG = load_config()
 
-OUTPUT_DIR = Path(CFG.get("OUTPUT_DIR", str(Path.home() / "claude-sessions")))
-USER_NAME = CFG.get("USER_NAME", os.environ.get("USER", "User"))
+OUTPUT_DIR = Path(os.path.expanduser(CFG.get("OUTPUT_DIR", "~/session-summaries")))
+USER_NAME = CFG.get("USER_NAME", "The User")
 MODEL = CFG.get("MODEL", "claude-haiku-4-5-20251001")
 
 
