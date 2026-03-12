@@ -10,7 +10,7 @@ INPUT=$(cat)
 # Check config exists
 if [ ! -f "$CONF" ]; then
     echo "[session-summarizer] Config not found. Create $CONF with your settings." >&2
-    echo "[session-summarizer] See: https://github.com/andersonimes/plugin_marketplace/tree/main/plugins/session-summarizer#configuration" >&2
+    echo "[session-summarizer] See: https://github.com/andersonimes/claude_plugins/tree/main/plugins/session-summarizer#configuration" >&2
     exit 0
 fi
 

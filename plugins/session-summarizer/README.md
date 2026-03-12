@@ -23,12 +23,12 @@ Each summary includes a title, tags, sample prompts, and any relevant links from
 
 First, add the marketplace (one time):
 ```
-/plugin marketplace add andersonimes/plugin_marketplace
+/plugin marketplace add andersonimes/claude_plugins
 ```
 
 Then install:
 ```
-/plugin install session-summarizer@plugin_marketplace
+/plugin install session-summarizer@claude_plugins
 ```
 
 ## Configuration
