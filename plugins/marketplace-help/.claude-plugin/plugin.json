@@ -1,9 +1,0 @@
-{
-  "name": "marketplace-help",
-  "description": "Provides information about the Claude Code Plugin Marketplace, including available plugins, installation instructions, and contribution guidelines.",
-  "version": "1.0.0",
-  "author": {
-    "name": "Anderson Imes",
-    "email": "anderson@example.com"
-  }
-}
