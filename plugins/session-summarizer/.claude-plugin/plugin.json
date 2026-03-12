@@ -1,0 +1,10 @@
+{
+  "name": "session-summarizer",
+  "version": "1.0.0",
+  "description": "Automatically summarize every Claude Code session into markdown files",
+  "author": {
+    "name": "Anderson"
+  },
+  "license": "MIT",
+  "keywords": ["sessions", "summaries", "hooks", "markdown", "logging"]
+}

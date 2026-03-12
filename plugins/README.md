@@ -8,7 +8,14 @@ This directory contains all plugins available in the Claude Code Plugin Marketpl
 Get information about the marketplace, available plugins, installation instructions, and contribution guidelines.
 
 **Components**: Commands
-**Install**: `claude-code plugins install plugins/marketplace-help`
+**Install**: `/plugin install marketplace-help@plugin_marketplace`
+
+### [session-summarizer](session-summarizer/)
+Automatically summarize every Claude Code session into markdown files. Splits multi-topic sessions, includes tags, sample prompts, and links.
+
+**Components**: Hooks (SessionEnd)
+**Install**: `/plugin install session-summarizer@plugin_marketplace`
+**Config**: Requires `~/.claude/session-summarizer.conf` — see [plugin README](session-summarizer/README.md)
 
 ---
 
