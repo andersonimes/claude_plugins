@@ -26,4 +26,4 @@ Automatically summarizes every Claude Code session into markdown files when the 
 /plugin install session-summarizer@claude_plugins
 ```
 
-Requires a config file after install — see the [plugin README](plugins/session-summarizer/README.md) for details.
+Works out of the box with zero config. Summaries are saved to `~/session-summaries/` by default. See the [plugin README](plugins/session-summarizer/README.md) for optional overrides.
