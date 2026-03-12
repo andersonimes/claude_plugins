@@ -40,7 +40,6 @@ def load_config() -> dict:
 
 CFG = load_config()
 
-OUTPUT_DIR = Path(os.path.expanduser(CFG.get("OUTPUT_DIR", "~/session-summaries")))
 USER_NAME = CFG.get("USER_NAME", "The User")
 MODEL = CFG.get("MODEL", "claude-haiku-4-5-20251001")
 
@@ -173,7 +172,7 @@ Return ONLY a valid JSON array, no markdown fencing.
 # ── File output ─────────────────────────────────────────────────────
 
 
-def write_summary(summary: dict, session_id: str) -> Path:
+def write_summary(summary: dict, session_id: str, output_dir: Path) -> Path:
     """Write a markdown summary file to the output directory."""
     topic_ts = summary.get("timestamp", "")
     if topic_ts:
@@ -185,7 +184,7 @@ def write_summary(summary: dict, session_id: str) -> Path:
         dt = datetime.now()
 
     datetime_str = dt.strftime("%Y-%m-%d %H:%M UTC")
-    year_month_dir = OUTPUT_DIR / dt.strftime("%Y") / dt.strftime("%m")
+    year_month_dir = output_dir / dt.strftime("%Y") / dt.strftime("%m")
     year_month_dir.mkdir(parents=True, exist_ok=True)
 
     filename_ts = dt.strftime("%Y-%m-%d-%H%M")
@@ -230,12 +229,12 @@ def write_summary(summary: dict, session_id: str) -> Path:
     return filepath
 
 
-def purge_session(session_id: str):
+def purge_session(session_id: str, output_dir: Path):
     """Remove all existing summary files for a given session ID."""
-    if not OUTPUT_DIR.exists():
+    if not output_dir.exists():
         return
     count = 0
-    for md_file in OUTPUT_DIR.rglob("*.md"):
+    for md_file in output_dir.rglob("*.md"):
         try:
             text = md_file.read_text()
             if f"**Session:** `{session_id}`" in text:
@@ -254,6 +253,14 @@ def main():
     hook_input = json.loads(sys.stdin.read())
     session_id = hook_input.get("session_id", "unknown")
     transcript_path = hook_input.get("transcript_path", "")
+    cwd = hook_input.get("cwd", os.getcwd())
+
+    # Resolve output directory: config override, or <project>/session-summaries
+    configured_dir = CFG.get("OUTPUT_DIR")
+    if configured_dir:
+        output_dir = Path(os.path.expanduser(configured_dir))
+    else:
+        output_dir = Path(cwd) / "session-summaries"
 
     if not transcript_path or not Path(transcript_path).exists():
         print(f"No transcript found at {transcript_path}", file=sys.stderr)
@@ -264,11 +271,11 @@ def main():
         print("Session too short to summarize", file=sys.stderr)
         sys.exit(0)
 
-    purge_session(session_id)
+    purge_session(session_id, output_dir)
 
     summaries = summarize(messages)
     for summary in summaries:
-        filepath = write_summary(summary, session_id)
+        filepath = write_summary(summary, session_id, output_dir)
         print(f"Summary written to {filepath}")
 
 

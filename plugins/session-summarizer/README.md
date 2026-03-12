@@ -30,7 +30,7 @@ Then install:
 /plugin install session-summarizer@claude_plugins
 ```
 
-That's it — it works out of the box with sensible defaults. Summaries are saved to `~/session-summaries/`.
+That's it — it works out of the box with sensible defaults. Summaries are saved to `session-summaries/` in your project directory.
 
 ## Configuration (optional)
 
@@ -44,7 +44,7 @@ MODEL=claude-haiku-4-5-20251001
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `OUTPUT_DIR` | Where to save summaries | `~/session-summaries` |
+| `OUTPUT_DIR` | Where to save summaries | `./session-summaries` (relative to project) |
 | `USER_NAME` | How you're referred to in summaries | `The User` |
 | `MODEL` | Claude model for summarization | `claude-haiku-4-5-20251001` |
 
