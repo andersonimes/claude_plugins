@@ -9,7 +9,6 @@ if [ ! -f "$CONF" ]; then
 [session-summarizer] The session summarizer plugin is installed but not configured.
 Create ~/.claude/session-summarizer.conf with the following settings:
 
-ANTHROPIC_API_KEY=sk-ant-...
 OUTPUT_DIR=~/claude-sessions
 USER_NAME=YourName
 MODEL=claude-haiku-4-5-20251001

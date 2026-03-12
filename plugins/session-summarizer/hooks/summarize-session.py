@@ -1,24 +1,19 @@
-#!/usr/bin/env -S uv run --script
-# /// script
-# requires-python = ">=3.12"
-# dependencies = ["anthropic"]
-# ///
+#!/usr/bin/env python3
 
 """
 Claude Code session summarizer.
 Reads a conversation transcript JSONL from a SessionEnd hook,
-calls the Claude API to generate a markdown summary, and saves it
+calls `claude -p` to generate a markdown summary, and saves it
 to a configurable output directory.
 """
 
 import json
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-
-import anthropic
 
 # ── Configuration (all overridable via env / config file) ───────────
 CONFIG_PATH = Path.home() / ".claude" / "session-summarizer.conf"
@@ -36,7 +31,7 @@ def load_config() -> dict:
                 k, v = line.split("=", 1)
                 cfg[k.strip()] = v.strip().strip('"').strip("'")
     # Env vars take precedence
-    for key in ("ANTHROPIC_API_KEY", "OUTPUT_DIR", "USER_NAME", "MODEL"):
+    for key in ("OUTPUT_DIR", "USER_NAME", "MODEL"):
         val = os.environ.get(key)
         if val:
             cfg[key] = val
@@ -45,7 +40,6 @@ def load_config() -> dict:
 
 CFG = load_config()
 
-ANTHROPIC_API_KEY = CFG.get("ANTHROPIC_API_KEY", "")
 OUTPUT_DIR = Path(CFG.get("OUTPUT_DIR", str(Path.home() / "claude-sessions")))
 USER_NAME = CFG.get("USER_NAME", os.environ.get("USER", "User"))
 MODEL = CFG.get("MODEL", "claude-haiku-4-5-20251001")
@@ -126,7 +120,7 @@ def slugify(text: str) -> str:
 
 
 def summarize(messages: list[dict]) -> list[dict]:
-    """Call Claude API to generate session summaries, splitting by topic."""
+    """Call claude -p to generate session summaries, splitting by topic."""
     transcript_text = ""
     for msg in messages:
         role = USER_NAME if msg["role"] == "user" else "Claude"
@@ -138,14 +132,7 @@ def summarize(messages: list[dict]) -> list[dict]:
     if len(transcript_text) > 50000:
         transcript_text = transcript_text[:50000] + "\n\n[transcript truncated]"
 
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY) if ANTHROPIC_API_KEY else anthropic.Anthropic()
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=4096,
-        messages=[
-            {
-                "role": "user",
-                "content": f"""Analyze this Claude Code session transcript. The session may cover multiple distinct topics or tasks. If the user changed subjects to something not strongly related to the original task, split those into separate summaries.
+    prompt = f"""Analyze this Claude Code session transcript. The session may cover multiple distinct topics or tasks. If the user changed subjects to something not strongly related to the original task, split those into separate summaries.
 
 Each message in the transcript is prefixed with an ISO timestamp. Return a JSON array of objects. Each object represents one topic/task and has these fields:
 
@@ -162,19 +149,25 @@ Return ONLY a valid JSON array, no markdown fencing.
 
 <transcript>
 {transcript_text}
-</transcript>""",
-            }
-        ],
+</transcript>"""
+
+    cmd = ["claude", "-p", "--model", MODEL, "--output-format", "text"]
+    result = subprocess.run(
+        cmd, input=prompt, capture_output=True, text=True, timeout=120
     )
 
-    text = response.content[0].text.strip()
+    if result.returncode != 0:
+        print(f"claude -p failed: {result.stderr}", file=sys.stderr)
+        sys.exit(1)
+
+    text = result.stdout.strip()
     if text.startswith("```"):
         text = re.sub(r"^```(?:json)?\n?", "", text)
         text = re.sub(r"\n?```$", "", text)
-    result = json.loads(text)
-    if isinstance(result, dict):
-        result = [result]
-    return result
+    parsed = json.loads(text)
+    if isinstance(parsed, dict):
+        parsed = [parsed]
+    return parsed
 
 
 # ── File output ─────────────────────────────────────────────────────

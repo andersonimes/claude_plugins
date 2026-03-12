@@ -7,17 +7,16 @@ A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin that auto
 When a Claude Code session ends, this plugin:
 
 1. Reads the conversation transcript
-2. Calls the Claude API to generate a concise, topic-aware summary
+2. Calls `claude -p` to generate a concise, topic-aware summary
 3. Saves markdown files organized by `YYYY/MM/` into your chosen directory
 4. Splits multi-topic sessions into separate summary files
 
-Each summary includes a title, tags, sample prompts, and any relevant links from the conversation.
+Each summary includes a title, tags, sample prompts, and any relevant links from the conversation. No separate API key is needed — it uses your existing Claude Code authentication.
 
 ## Prerequisites
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
-- [uv](https://docs.astral.sh/uv/) (Python package runner)
-- An [Anthropic API key](https://console.anthropic.com/settings/keys)
+- Python 3.12+
 
 ## Install
 
@@ -31,23 +30,11 @@ Then install:
 /plugin install session-summarizer@claude_plugins
 ```
 
-## Getting an API key
-
-This plugin calls the Anthropic API directly to generate summaries, so you'll need your own API key:
-
-1. Go to [console.anthropic.com](https://console.anthropic.com/) and create an account (or sign in)
-2. Navigate to [Settings > API Keys](https://console.anthropic.com/settings/keys)
-3. Click "Create Key", give it a name, and copy the key (it starts with `sk-ant-`)
-4. Add credit to your account under [Settings > Billing](https://console.anthropic.com/settings/billing)
-
-The default model (`claude-haiku-4-5-20251001`) is inexpensive — expect a fraction of a cent per session summary.
-
 ## Configuration
 
 After installing, create `~/.claude/session-summarizer.conf`:
 
 ```
-ANTHROPIC_API_KEY=sk-ant-...
 OUTPUT_DIR=~/claude-sessions
 USER_NAME=Alice
 MODEL=claude-haiku-4-5-20251001
@@ -55,7 +42,6 @@ MODEL=claude-haiku-4-5-20251001
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key | *required* (or set as env var) |
 | `OUTPUT_DIR` | Where to save summaries | `~/claude-sessions` |
 | `USER_NAME` | How you're referred to in summaries | System username |
 | `MODEL` | Claude model for summarization | `claude-haiku-4-5-20251001` |
