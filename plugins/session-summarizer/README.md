@@ -31,6 +31,17 @@ Then install:
 /plugin install session-summarizer@claude_plugins
 ```
 
+## Getting an API key
+
+This plugin calls the Anthropic API directly to generate summaries, so you'll need your own API key:
+
+1. Go to [console.anthropic.com](https://console.anthropic.com/) and create an account (or sign in)
+2. Navigate to [Settings > API Keys](https://console.anthropic.com/settings/keys)
+3. Click "Create Key", give it a name, and copy the key (it starts with `sk-ant-`)
+4. Add credit to your account under [Settings > Billing](https://console.anthropic.com/settings/billing)
+
+The default model (`claude-haiku-4-5-20251001`) is inexpensive — expect a fraction of a cent per session summary.
+
 ## Configuration
 
 After installing, create `~/.claude/session-summarizer.conf`:
