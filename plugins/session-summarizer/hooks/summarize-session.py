@@ -137,12 +137,14 @@ Each message in the transcript is prefixed with an ISO timestamp. Return a JSON 
 
 - "title": A short descriptive title for what was accomplished (5-10 words)
 - "timestamp": The ISO timestamp of the first message where this topic begins (copy it exactly from the transcript)
-- "summary": 2-3 sentences describing what was done and the outcome. Write in a slightly whimsical, fun tone — like you're telling a friend what they got up to. Refer to the user as "{USER_NAME}" (not "the user"). Keep it light but informative.
+- "summary": 2-3 sentences describing what was done and the outcome. Write in a slightly whimsical, fun tone — like you're telling a friend what they got up to. Refer to the user as "{USER_NAME}" (not "the user"). Keep it light but informative. IMPORTANT: Do NOT include specific sensitive details like dollar amounts, account balances, passwords, API keys, account numbers, or other personal financial/security information. Instead, describe what was done in general terms (e.g. "submitted a reimbursement claim" rather than "submitted a $X.XX claim").
 - "sample_prompts": An array of 2-4 interesting/representative prompts {USER_NAME} sent during this topic (exact quotes, shortened if very long)
 - "tags": An array of 3-6 topic tags (lowercase, e.g. "shell-config", "debugging", "python")
 - "links": An array of any relevant URLs that appeared in this part of the conversation (documentation pages, GitHub repos, tools referenced, etc.). Omit internal file paths — only include actual web URLs. If none, use an empty array.
 
 If the whole session is one coherent topic, return an array with a single object. Only split when the topic genuinely changes.
+
+Omit purely mechanical segments like git staging/committing/pushing (e.g. running /wrapup) — these are routine housekeeping, not interesting topics. If the entire session is just a wrapup, return an empty array []. Also strip git/commit/push references from summaries and sample_prompts of other topics — don't mention "committed and pushed" in summaries, and don't include prompts like "let's commit" or "let's push to github".
 
 Return ONLY a valid JSON array, no markdown fencing.
 
