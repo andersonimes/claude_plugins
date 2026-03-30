@@ -27,3 +27,13 @@ Automatically summarizes every Claude Code session into markdown files when the 
 ```
 
 Works out of the box with zero config. Summaries are saved to `session-summaries/` in your project directory by default. See the [plugin README](plugins/session-summarizer/README.md) for optional overrides.
+
+### [stay-awake](plugins/stay-awake/)
+
+Prevents your computer from sleeping while a Claude Code session is active. Uses `systemd-inhibit` on Linux and `caffeinate` on macOS.
+
+```
+/plugin install stay-awake@claude_plugins
+```
+
+Zero config. Sleep inhibition starts on first tool use, releases when the session ends. See the [plugin README](plugins/stay-awake/README.md) for details.
